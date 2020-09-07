@@ -15,12 +15,11 @@ function App() {
   //Para saber si hay o no un usuario activo
   useEffect( () => {
     auth.onAuthStateChanged(user => {
-      console.log(user);
-      if (user) {
-        setFirebaseUser(user);
+      //console.log(user)
+      if(user){
+          setFirebaseUser(user)
       }else{
-        //
-        setFirebaseUser(null);
+          setFirebaseUser(null)
       }
     })
   }, []);
@@ -39,14 +38,13 @@ function App() {
             <Admin />
           </Route>
           <Route path="/">
-            inicio...
+            Inicio...
           </Route>
         </Switch>
       </div>
-    
     </BrowserRouter>
   ) : (
-    <p>Cargando...</p>
+    <div>Cargando...</div>
   )
 }
 

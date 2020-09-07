@@ -8,7 +8,7 @@ const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [esRegistro, setEsRegistro] = useState(true);
+    const [esRegistro, setEsRegistro] = useState(false);
     
     
     //funciones
@@ -54,15 +54,15 @@ const Login = (props) => {
             setEmail('');
             setPassword('');
             setError(null);
-
             // Redirecionamos a la pagina de Administador
-            setInterval(() => {
+            props.history.push('/admin');
+            /* setInterval(() => {
                 props.history.push('/admin');
-            }, 1000)
+            }, 1000) */
             
         } catch (error) {
             console.log(error);
-            console.log(error.code);
+            //console.log(error.code);
             if (error.code === 'auth/user-not-found') {
                 setError('El email no existe');
             }
@@ -96,9 +96,10 @@ const Login = (props) => {
             setError(null);
 
             // Redirecionamos a la pagina de login
-            setInterval(() => {
+            props.history.push('/admin');
+            /* setInterval(() => {
                 props.history.push('/admin');
-            }, 1000)
+            }, 1000) */
 
 
         } catch (error) {
@@ -158,7 +159,11 @@ const Login = (props) => {
                         <button 
                             className="btn btn-info btn-sm btn-block"
                             type="button"
-                            onClick={() => setEsRegistro(!esRegistro)}
+                            onClick={() => {
+                                setEsRegistro(!esRegistro)
+                                setError(null)
+                                setPassword('')
+                            }}
                         >
                             {
                                 esRegistro ? '¿Ya tiene una cuenta?' : '¿No tiene una cuenta?'

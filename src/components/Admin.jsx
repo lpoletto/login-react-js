@@ -15,7 +15,6 @@ const Admin = (props) => {
             setUsuario(auth.currentUser);
         }else{
             console.log('no existe el usuario');
-            setUsuario(null);
             props.history.push('/login');
         }
     }, [props.history]);
