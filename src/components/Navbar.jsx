@@ -17,13 +17,13 @@ const Navbar = (props) => {
     return (
         <div className="navbar navbar-dark bg-dark">
             
-            <Link to="/" className="navbar-brand">AUTH</Link>
+            <Link to="/login" className="navbar-brand">AUTH</Link>
 
             <div>
                 <div className="d-flex">
-                    <NavLink to="/" exact className="btn btn-dark mr-2">
+                    {/* <NavLink to="/" exact className="btn btn-dark mr-2">
                         Inicio
-                    </NavLink>
+                    </NavLink> */}
                     {
                         props.firebaseUser !== null ? (
                             <NavLink to="/admin" className="btn btn-dark mr-2">
@@ -32,9 +32,16 @@ const Navbar = (props) => {
                         ) : null
                     }
                     {
+                        props.firebaseUser && ( 
+                            <button  className="btn btn-link mr-2">
+                                {props.firebaseUser.email}
+                            </button>
+                        )
+                    }
+                    {
                         props.firebaseUser !== null ? (
                             <button 
-                                className="btn btn-warning mr-2"
+                                className="btn btn-outline-warning btn-sm mr-2"
                                 onClick={ () => cerrarSesion() }
                             >
                                 Cerrar sesión

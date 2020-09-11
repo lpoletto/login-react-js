@@ -37,9 +37,9 @@ function App() {
           <Route path="/admin">
             <Admin />
           </Route>
-          <Route path="/">
+          {/* <Route path="/">
             Inicio...
-          </Route>
+          </Route> */}
         </Switch>
       </div>
     </BrowserRouter>
