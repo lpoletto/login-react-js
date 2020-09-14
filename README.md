@@ -1,4 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Descripción
+Projecto de login con React JS y Firebase. <br />
+Cada usuario autenticado podrá ver su lista de tareas, guardadas en su bbdd. <br />
 
 ## Available Scripts
 
