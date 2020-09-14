@@ -9,18 +9,42 @@ const Firestore = (props) => {
     const [tarea, setTarea] = React.useState('')
     const [modoEdicion, setModoEdicion] = React.useState(false)
     const [id, setId] = React.useState('')
+    const [ultimo, setUltimo] = React.useState(null)
+    const [desactivar, setDesactivar] = React.useState(false)
   
   
     React.useEffect(() => {
   
       const obtenerDatos = async () => {
-  
+        setDesactivar(true);
+
         try {
-  
-          const data = await db.collection(props.user.uid).get()
+          //Limitar, ordernar y paginar resultados con Firestore
+
+          //const data = await db.collection(props.user.uid).get()
+          const data = await db.collection(props.user.uid)
+            .limit(2)
+            .orderBy('fecha', "desc")
+            .get()
           const arrayData = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          setUltimo(data.docs[data.docs.length - 1]) // último documento
+          
           console.log(arrayData)
           setTareas(arrayData)
+          
+          // Verificamos si existen mas documentos
+          const query = await db.collection(props.user.uid)
+            .limit(2)
+            .orderBy('fecha', "desc")
+            .startAfter(data.docs[data.docs.length - 1])
+            .get()
+
+          if (query.empty) {
+            console.log('no hay más docs');
+            setDesactivar(true)
+          }else{
+            setDesactivar(false)
+          }
           
         } catch (error) {
           console.log(error)
@@ -61,7 +85,47 @@ const Firestore = (props) => {
   
       console.log(tarea)
     }
+
+    // Páginación 
+    const siguiente = async () => {
+      console.log('siguiente');
+      try {
+        const data = await db.collection(props.user.uid)
+          .limit(2)
+          .orderBy('fecha', "desc")
+          .startAfter(ultimo) // Para que comience con el documento anterior. Guardado en ultimo
+          .get()
+
+        // Cargamos las tareas
+        const arrayData = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setTareas([
+          ...tareas,
+          ...arrayData
+        ]);
+
+        // Actualizamos el ultimo
+        setUltimo(data.docs[data.docs.length - 1]);
+        
+        // Verificamos si existen mas documentos
+        const query = await db.collection(props.user.uid)
+        .limit(2)
+        .orderBy('fecha', "desc")
+        .startAfter(data.docs[data.docs.length - 1])
+        .get()
+
+      if (query.empty) {
+        console.log('no hay más docs');
+        setDesactivar(true)
+      }else{
+        setDesactivar(false)
+      }
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
   
+
     const eliminar = async (id) => {
       try {
         
@@ -115,7 +179,8 @@ const Firestore = (props) => {
                         {
                         tareas.map(item => (
                             <li className="list-group-item" key={item.id}>
-                            {item.name} - {moment(item.fecha).format('L')}
+                              {/* Formato de la fecha */}  
+                            {item.name} - {moment(item.fecha).format('lll')}
                             <button 
                                 className="btn btn-danger btn-sm float-right"
                                 onClick={() => eliminar(item.id)}
@@ -132,6 +197,14 @@ const Firestore = (props) => {
                         ))
                         }
                     </ul>
+                    <button 
+                      className="btn btn-info btn-block btn-sm mt-2"
+                      onClick={() => siguiente()}
+                      disabled={desactivar}
+                    >
+                      
+                      Siguiente...
+                    </button>
                 </div>
                 <div className="col-md-6">
                     <h3>
