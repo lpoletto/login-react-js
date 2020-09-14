@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Admin from './components/Admin';
 import{auth} from './services/firebase';
+import Reset from './components/Reset';
 
 function App() {
   const [firebaseUser, setFirebaseUser] = useState(false); // Nuestro usuario parte en falso
@@ -31,15 +32,18 @@ function App() {
         <Navbar firebaseUser={firebaseUser}/>
         
         <Switch>
+          <Route path="/reset">
+            <Reset />
+          </Route>
           <Route path="/login">
             <Login/>
           </Route>
           <Route path="/admin">
             <Admin />
           </Route>
-          {/* <Route path="/">
+          <Route path="/">
             Inicio...
-          </Route> */}
+          </Route>
         </Switch>
       </div>
     </BrowserRouter>

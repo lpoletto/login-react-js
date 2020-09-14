@@ -1,5 +1,7 @@
-import React from 'react'
-import {db} from '../services/firebase'
+import React from 'react';
+import {db} from '../services/firebase';
+import moment from 'moment'; // Formateo de fechas
+import 'moment/locale/es'; // Para pasar a español 
 
 const Firestore = (props) => {
 
@@ -113,7 +115,7 @@ const Firestore = (props) => {
                         {
                         tareas.map(item => (
                             <li className="list-group-item" key={item.id}>
-                            {item.name}
+                            {item.name} - {moment(item.fecha).format('L')}
                             <button 
                                 className="btn btn-danger btn-sm float-right"
                                 onClick={() => eliminar(item.id)}
@@ -162,4 +164,4 @@ const Firestore = (props) => {
     )
 }
 
-export default Firestore
+export default Firestore;
